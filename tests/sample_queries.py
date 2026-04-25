@@ -7,9 +7,7 @@ import httpx
 BASE_URL = "http://localhost:8000"
 
 SAMPLE_QUERIES = [
-    "What is Btech Syllabus?",
-    "Tell me about palak's technical skills?",
-    "What's the main architecture of TTS report"
+    "What is in ssmda lab manual?"
 ]
 
 client = httpx.Client(base_url=BASE_URL, timeout=120)

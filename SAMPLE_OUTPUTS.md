@@ -57,7 +57,7 @@ POST /ask
 
 ---
 
-## Query 3 — Deep technical document understanding
+## Query 2 — Deep technical document understanding
 
 **Request**
 ```json
@@ -85,16 +85,45 @@ POST /ask
 
 ---
 
-## Indexed Documents
+---
 
+## Query 3 — Structured content extraction from a lab manual
+
+**Request**
+```json
+POST /ask
+{
+  "query": "What is in SSMDA lab manual?",
+  "top_k": 5
+}
 ```
-SSMDA_LAB_MANUAL (2).pdf                        18 chunks
-tts_report 1.pdf                                20 chunks
-Auth_Platform_Documentation (1).docx            8 chunks
-Offer letter- ML Intern -- Palak_edited.pdf      7 chunks
-Reference Document of Idea Abstract.pdf          5 chunks
-Concept_Note_Safer_Delhi.docx                    2 chunks
-Palak_Bansal_Resume (14).pdf                     1 chunk
-codezen (5).pdf                                  1 chunk
-codezen (4).pdf                                  1 chunk
+
+**Response**
+```json
+{
+  "answer": "The SSMDA lab manual is for the course 'Statistics, Statistical Modelling and Data Analytics'. It contains experiments in Scilab, SPSS, and R:
+ 
+- Experiment 01: Basic matrix operations (Scilab)
+- Experiment 02: Finding Eigenvalues and eigenvectors (Scilab)
+- Experiment 03: Solving equations — Gauss Elimination, Gauss Jordan, Gauss Siedel (Scilab)
+- Experiment 06: Plotting functions and finding derivatives
+- Experiment 07: Presenting data as a frequency table (SPSS)
+- Experiment 10: Scatter diagrams, residual plots, outliers, leverage and influential data points (R)
+- Experiment 11: Calculating correlation (R)
+- Experiment 12-13: Time series analysis and linear regression (R)
+- Experiment 14: Probability and distributions (R)
+ 
+Also includes instructions for creating time series data.",
+  "sources": [
+    "SSMDA_LAB_MANUAL (2).pdf",
+    "tts_report 1.pdf"
+  ],
+  "chunks_used": 5,
+  "model": "llama-3.1-8b-instant",
+  "query": "What is in SSMDA lab manual?"
+}
 ```
+
+> Accurately extracted a structured list of 10+ experiments across 3 tools (Scilab, SPSS, R) from a dense academic PDF.
+ 
+---
