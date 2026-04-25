@@ -53,7 +53,7 @@ POST /ask
 }
 ```
 
-> ✅ Retrieved skills from resume and cross-referenced with TTS report for additional technical context.
+>  Retrieved skills from resume and cross-referenced with TTS report for additional technical context.
 
 ---
 
@@ -81,7 +81,7 @@ POST /ask
 }
 ```
 
-> ✅ Extracted a detailed multi-stage architecture breakdown from a technical PDF, including component status and critical path.
+>  Extracted a detailed multi-stage architecture breakdown from a technical PDF, including component status and critical path.
 
 ---
 
