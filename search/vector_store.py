@@ -1,12 +1,3 @@
-"""
-search/vector_store.py
-FAISS-backed vector store with JSON metadata persistence.
-Supports:
-  - Add / bulk add chunks
-  - Similarity search with metadata filtering
-  - Incremental index updates
-  - Persist & load index
-"""
 
 import json
 import logging
@@ -40,10 +31,6 @@ class VectorStore:
 
         self._load()
 
-    # ------------------------------------------------------------------ #
-    #  Public API                                                          #
-    # ------------------------------------------------------------------ #
-
     def add_chunks(self, chunks: list[Chunk], embeddings: list[np.ndarray]):
         """Add chunks and their embeddings to the store."""
         assert len(chunks) == len(embeddings), "Chunks and embeddings must have same length"
@@ -68,7 +55,6 @@ class VectorStore:
         logger.info(f"Added {len(valid_pairs)} chunks. Total: {self._index.ntotal}")
 
     def remove_document(self, doc_id: str):
-        """Remove all chunks belonging to a document (full rebuild)."""
         if doc_id not in self._doc_ids:
             return
 
@@ -79,8 +65,6 @@ class VectorStore:
         self._metadata = remaining
         self._doc_ids = {m["doc_id"] for m in remaining}
         self._index = self._new_index()
-        # Note: caller must re-add embeddings for remaining docs if using FAISS flat index
-        # For production, use FAISS IDMap or keep embeddings cached
         self._save()
 
     def search(
@@ -90,7 +74,6 @@ class VectorStore:
         filter_doc_ids: Optional[list[str]] = None,
         filter_file_names: Optional[list[str]] = None,
     ) -> list[dict]:
-        """Return top-k most similar chunks with metadata."""
         if self._index is None or self._index.ntotal == 0:
             return []
 
@@ -122,7 +105,6 @@ class VectorStore:
         return results
 
     def list_documents(self) -> list[dict]:
-        """Return deduplicated list of indexed documents."""
         seen: dict[str, dict] = {}
         for meta in self._metadata:
             doc_id = meta["doc_id"]
@@ -146,10 +128,6 @@ class VectorStore:
     @property
     def total_documents(self) -> int:
         return len(self._doc_ids)
-
-    # ------------------------------------------------------------------ #
-    #  Persistence                                                         #
-    # ------------------------------------------------------------------ #
 
     def _save(self):
         self.index_path.parent.mkdir(parents=True, exist_ok=True)

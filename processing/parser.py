@@ -27,14 +27,12 @@ class ParsedDocument:
 
 
 class DocumentParser:
-    """Extracts and normalizes text from various document types."""
 
     def parse(self, content: bytes, file_name: str, file_id: str, mime_type: str) -> ParsedDocument:
         doc = ParsedDocument(file_id=file_id, file_name=file_name, mime_type=mime_type)
         ext = file_name.lower().split(".")[-1] if "." in file_name else ""
 
         try:
-            # Route by extension or MIME type
             if ext == "pdf" or mime_type == "application/pdf":
                 doc.raw_text, doc.page_count = self._parse_pdf(content)
             elif ext in ("docx",) or "wordprocessingml" in mime_type:
@@ -54,9 +52,6 @@ class DocumentParser:
 
         return doc
 
-    # ------------------------------------------------------------------ #
-    #  Parsers                                                             #
-    # ------------------------------------------------------------------ #
 
     def _parse_pdf(self, content: bytes) -> tuple[str, int]:
         try:
@@ -100,10 +95,6 @@ class DocumentParser:
             except UnicodeDecodeError:
                 continue
         return content.decode("utf-8", errors="replace")
-
-    # ------------------------------------------------------------------ #
-    #  Normalization                                                       #
-    # ------------------------------------------------------------------ #
 
     def _normalize(self, text: str) -> str:
         # Remove null bytes and non-printable chars

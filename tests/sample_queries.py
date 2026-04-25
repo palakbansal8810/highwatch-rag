@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-tests/sample_queries.py
-Run sample queries against a running Highwatch RAG instance.
-Usage: python tests/sample_queries.py
-"""
 
 import json
 import time
@@ -70,7 +64,6 @@ def ask_question(query: str, top_k: int = 5):
 
 
 def poll_until_done():
-    """Poll /sync-status until sync completes."""
     print("\nPolling for sync completion every 10s...")
     print("   (Watch server terminal for live file-by-file progress)\n")
     while True:
@@ -96,8 +89,7 @@ def poll_until_done():
             print(f"\n Sync failed: {state.get('error')}")
             sys.exit(1)
         elif status == "idle":
-            # Sync already finished before we started polling (fast drives)
-            print("  ✓ Sync already completed.")
+            print(" Sync already completed.")
             break
         else:
             print(f"  Status: {status}")
@@ -106,7 +98,6 @@ def poll_until_done():
 def sync_drive(incremental: bool = False):
     print_section("Starting Google Drive Sync")
 
-    # Check if already running from a previous trigger
     current = check_sync_status()
     if current.get("status") == "running":
         print("Sync already in progress from a previous trigger, polling...")
@@ -128,7 +119,6 @@ if __name__ == "__main__":
         print("\n  Not authenticated. Visit http://localhost:8000/auth/login")
         sys.exit(1)
 
-    # Check if a sync is currently running (e.g. triggered from server terminal)
     sync_st = check_sync_status()
 
     if sync_st.get("status") == "running":
@@ -141,10 +131,8 @@ if __name__ == "__main__":
         print(f"\n Already have {status['total_chunks']} chunks from {status['total_documents']} docs. Skipping sync.")
         print("  Tip: POST /sync-drive with force_reindex=true to re-index everything.")
 
-    # List documents
     list_documents()
 
-    # Run sample queries
     print_section("Sample Queries")
     for query in SAMPLE_QUERIES:
         ask_question(query)
